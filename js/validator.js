@@ -9,13 +9,39 @@ const passwordValidator = (password) => {
 };
 
 
+
 const userNameValidator = (name) => {
     const nameRegex = /^.{3,}$/;
     return nameRegex.test(name)
 };
 
+ const testPasswordForce= (password) => {
+    const hasNumber = /\d/;
+    const hasSymbol = /[!*_]/;
 
-export { emailValidator, passwordValidator, userNameValidator };
+    if (
+      password.length >= 9 &&
+      hasNumber.test(password) &&
+      hasSymbol.test(password)
+    ) {
+      return "fort";
+    }
+    if (password.length < 6) {
+      return "faible";
+    }
+    if (
+      password.length >= 6 &&
+      (hasNumber.test(password) || hasSymbol.test(password))
+    ) {
+      return "moyen";
+    }
+
+    return "faible"; // Valeur par défaut
+  }
+
+
+
+export { emailValidator, passwordValidator, userNameValidator, testPasswordForce };
 
 /**
  * Mettre en place les vérifications sur chaque champ du formulaire d'inscription :

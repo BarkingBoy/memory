@@ -1,23 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script type="module" defer src="js/app.js"></script>
+    <title>Profil</title>
+    <link rel="stylesheet" href="css/profil.css">
 </head>
+
 <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="inscription.html">S'inscrire</a></li>
-                    <li><a href="connexion.html">Se connecter</a></li>
-                    <li><a href="compte.html">Profil</a></li>
-                    <li><a href="jouer.html">Jouer</a></li>
-                </ul>
-            </nav>
-        </header>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="inscription.html">S'inscrire</a></li>
+                <li><a href="connexion.html">Se connecter</a></li>
+                <li><a href="compte.html">Profil</a></li>
+                <li><a href="jouer.html">Jouer</a></li>
+            </ul>
+        </nav>
+        <h3>
+            <div id="profile"></div>
+        </h3>
+    </header>
+
+    <section id="choix-taille-memory">
+        <h2><strong>Taille du jeu</strong></h2>
+        <select name="memory-choice" id="choix-taille-memory">
+            <option value="16">4*4</option>
+            <option value="20">4*5</option>
+            <option value="24">4*6</option>
+        </select>
+    </section>
+
+    <section id="choix-image-section">
+        <h2><strong>Choix d'image</strong></h2>
+        <select name="image-memory" id="choix-image">
+            <option value="chien">Doggo</option>
+            <option value="animal">Animaux</option>
+        </select>
+        <div id="img-exemple"></div>
+    </section>
+
+    <script type="module" src="js/profil.js"></script>
 </body>
+
 </html>

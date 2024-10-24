@@ -1,65 +1,55 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Récupérer les informations de session
   const sessionData = sessionStorage.getItem("idSession");
-  const tailleMemory = document.querySelector("#choix-taille-memory")
-  const nombreDeCartes = parseInt(tailleMemory.value)
-  sessionStorage.setItem("Taille memory", JSON.stringify(nombreDeCartes))
+  const buttonDeconnexion = document.querySelector(".deconnexion");
+  const profileSection = document.getElementById("profile");
+  const imgExempleDiv = document.getElementById("img-exemple");
+  const scoreListDiv = document.getElementById("score-list");
+  const choixImageSelect = document.getElementById("choix-image");
 
   if (sessionData) {
-    // Parse les données JSON en objet
-    const user = JSON.parse(sessionData);
+    const { pseudo, mail } = JSON.parse(sessionData);
+    buttonDeconnexion.style.display = "block";
+    profileSection.innerHTML = `<div>Bienvenue, ${pseudo} !</div><div>Ton identifiant : ${mail}</div>`;
 
-    // Récupérer la section profile du DOM
-    const profileSection = document.getElementById("profile");
+    buttonDeconnexion.addEventListener("click", () => {
+      sessionStorage.clear();
+      window.location.href = "index.html";
+    });
 
-    // Vérifier si l'élément profile existe
-    if (profileSection) {
-      profileSection.innerHTML = `
-                <div>Bienvenue, ${user.pseudo} !</div>
-                <div>Ton identifiant : ${user.mail}</div>`;
-    } else {
-      console.error("L'élément avec l'ID 'profile' est introuvable dans le DOM.");
-    }
-
-    // Afficher l'image exemple par défaut ou la première sélection
-    affichageImageExemple();
-
-    // Ajouter un écouteur d'événements sur le choix d'image
-    const choixImageSelect = document.getElementById("choix-image");
-    choixImageSelect.addEventListener("change", affichageImageExemple);
+    afficherMeilleursScores();
   } else {
-    console.error("Aucun utilisateur connecté.");
+    buttonDeconnexion.style.display = "none";
   }
+
+  choixImageSelect.addEventListener("change", affichageImageExemple);
+  affichageImageExemple();
 
   function affichageImageExemple() {
-    const choosedImage = document.querySelector("#choix-image").value; // récupère la valeur ici
-    let choosedImageSrc;
+    const choosedImage = choixImageSelect.value;
+    const imageSources = {
+      chiens: "./ressources/chiens/memory_details_chiens.png",
+      animaux: "./ressources/animaux/memory_detail_animaux.png",
+    };
 
-    if (choosedImage === "chien") {
-      choosedImageSrc = "./ressources/chiens/memory_details_chiens.png";
-    } else if (choosedImage === "animal") {
-      choosedImageSrc = "./ressources/animaux/memory_detail_animaux.png";
-    }
-
-    sessionStorage.setItem("ChoixImages", choosedImage)
-
-    // Vérifier que l'image source est définie avant de l'afficher
-    const imgExempleDiv = document.getElementById("img-exemple");
-    imgExempleDiv.innerHTML = ""; // Effacer le contenu précédent
+    sessionStorage.setItem("ChoixImages", choosedImage);
+    imgExempleDiv.innerHTML = "";
+    const choosedImageSrc = imageSources[choosedImage];
 
     if (choosedImageSrc) {
-      // Créer l'élément image
-      let imageExemple = document.createElement("img");
-      imageExemple.src = choosedImageSrc;
-      imageExemple.className = "image-exemple";
-
-      // Ajouter l'image au div
-      imgExempleDiv.appendChild(imageExemple);
+      const img = document.createElement("img");
+      img.src = choosedImageSrc;
+      img.className = "image-exemple";
+      imgExempleDiv.appendChild(img);
     }
   }
 
-  
-    
+  function afficherMeilleursScores() {
+    const scores = JSON.parse(sessionStorage.getItem("meilleursScores")) || [];
 
-
+    scoreListDiv.innerHTML = scores.length
+      ? `<h2>Meilleurs Scores</h2><ul>${scores
+          .map((score, index) => `<li>Score ${index + 1} : ${score}</li>`)
+          .join("")}</ul>`
+      : "<div>Aucun score enregistré pour l'instant.</div>";
+  }
 });

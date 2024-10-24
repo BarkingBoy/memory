@@ -1,4 +1,4 @@
-import { imageChien } from "./images.js";
+import { imageGeneration } from "./images.js";
 
 window.onload = init;
 
@@ -6,51 +6,58 @@ function init() {
   const choixNombreDeCartes = document.querySelector(".nombreDeCartes");
   const playButton = document.querySelector("#play-button");
   const container = document.querySelector(".conteneur-cartes");
-  const choosedImage = sessionStorage.getItem("choosedImage")
+  const scoreListDiv = document.querySelector("#score-list");
+  const scoreListChiens = document.querySelector("#score-list-chiens");
 
-  let premiereCarte = null; // Stocke la première carte cliquée
-  let deuxiemeCarte = null; // Stocke la deuxième carte cliquée
-  let verrouillageJeu = false; // Évite les clics pendant la comparaison
-  let score = 0; // Score de l'utilisateur
-  let bonDuo = 0; // Compteur de paires trouvées
-  let nombreDeCartes; // Nombre total de cartes
+  let premiereCarte = null;
+  let deuxiemeCarte = null;
+  let verrouillageJeu = false;
+  let score = 0;
+  let bonDuo = 0;
+  let nombreDeCartes;
 
-  // Événement pour commencer le jeu
+  // Sauvegarde de la taille dans le sessionStorage
+  choixNombreDeCartes.addEventListener("change", () => {
+    const taille = parseInt(choixNombreDeCartes.value, 10);
+    if (!isNaN(taille)) {
+      localStorage.setItem("Taille memory", taille);
+      console.log("Taille memory enregistrée :", taille);
+    } else {
+      console.error("Erreur : valeur non valide.");
+    }
+  });
+
+  afficherMeilleursScores();
+
   playButton.addEventListener("click", () => {
     nombreDeCartes = parseInt(choixNombreDeCartes.value);
     genererCartes(nombreDeCartes);
   });
 
-  // Fonction pour générer des cartes
   function genererCartes(nBCartes) {
-    container.innerHTML = ""; // Réinitialise le conteneur
-    const arrayChien = []; // Tableau pour stocker les images de chiens
+    container.innerHTML = "";
+    const arrayChien = [];
 
-    // Générer des paires d'images de chiens
     while (arrayChien.length < nBCartes / 2) {
-      const img = imageChien();
+      const img = imageGeneration();
       const imgSrc = img.src;
 
-      // Ajouter l'image au tableau si elle n'existe pas déjà
       if (!arrayChien.some((chien) => chien.src === imgSrc)) {
         arrayChien.push(img);
       }
     }
 
-    // Créer des paires en dupliquant les images
     const allCartes = [...arrayChien, ...arrayChien];
 
-    // Mélanger les cartes pour un affichage aléatoire
     allCartes.sort(() => Math.random() - 0.5);
 
-    // Afficher les cartes
     allCartes.forEach((img) => {
       const cartes = document.createElement("div");
       cartes.className = "cartes";
 
       const couverture = document.createElement("div");
       couverture.className = "couverture";
-      couverture.style.visibility = "visible"; // Couvrir les cartes initialement
+      couverture.style.visibility = "visible";
 
       const imageCouverture = document.createElement("img");
       imageCouverture.src = "./ressources/question.svg";
@@ -61,64 +68,109 @@ function init() {
       cartes.appendChild(couverture);
       container.appendChild(cartes);
 
-      // Événement pour gérer le clic sur la carte
       cartes.addEventListener("click", () => {
         handleCardClick(cartes, couverture);
       });
     });
   }
 
-  // Fonction pour gérer le clic sur une carte
   function handleCardClick(cartes, couverture) {
-    if (verrouillageJeu || couverture.style.visibility === "hidden") return; // Ignorer si le jeu est verrouillé ou si la carte est déjà révélée
+    if (verrouillageJeu || couverture.style.visibility === "hidden") return;
 
-    cartes.classList.add("flipped"); // Retourne la carte
-    couverture.style.visibility = "hidden"; // Révèle la carte
+    cartes.classList.add("flipped");
+    couverture.style.visibility = "hidden";
 
     if (!premiereCarte) {
-      // Si c'est la première carte cliquée
       premiereCarte = cartes;
     } else if (!deuxiemeCarte) {
-      // Si c'est la deuxième carte cliquée
       deuxiemeCarte = cartes;
-      verifierCorrespondance(); // Vérifie si les deux cartes correspondent
+      verifierCorrespondance();
     }
   }
 
-  // Fonction pour vérifier la correspondance entre les deux cartes
   function verifierCorrespondance() {
     const premiereImage = premiereCarte.querySelector("img").src;
     const deuxiemeImage = deuxiemeCarte.querySelector("img").src;
 
     if (premiereImage === deuxiemeImage) {
-      // Si les images correspondent
       bonDuo++;
       console.log(`Paires trouvées: ${bonDuo}`);
 
-      // Vérifie si toutes les paires ont été trouvées
       if (bonDuo === nombreDeCartes / 2) {
         alert("Victoire ! Toutes les paires ont été trouvées !");
-        bonDuo = 0; // Réinitialise le compteur pour une nouvelle partie
+        sauvegarderScore(score);
+        afficherMeilleursScores();
+        bonDuo = 0;
       }
 
-      // Réinitialise les cartes sélectionnées
       premiereCarte = null;
       deuxiemeCarte = null;
-
     } else {
-      // Si elles ne correspondent pas
       score++;
       document.querySelector("#score").textContent = `Score : ${score}`;
-      verrouillageJeu = true; // Verrouille le jeu
-
-      // Cache les cartes après un délai
+      verrouillageJeu = true;
       setTimeout(() => {
         masquerCartes();
       }, 1000);
     }
   }
 
-  // Fonction pour masquer les cartes
+  function sauvegarderScore(score) {
+    const imageChoisie = sessionStorage.getItem("ChoixImages");
+
+    let scores =
+      JSON.parse(localStorage.getItem(`meilleursScores_${imageChoisie}`)) || [];
+
+    scores.push(score);
+
+    // Trie les scores du plus petit au plus grand
+    scores.sort((a, b) => a - b);
+
+    // Garde seulement les 5 meilleurs scores
+    scores = scores.slice(0, 5);
+
+    localStorage.setItem(
+      `meilleursScores_${imageChoisie}`,
+      JSON.stringify(scores)
+    );
+  }
+
+  function afficherMeilleursScores() {
+    const scoresChiens =
+      JSON.parse(localStorage.getItem("meilleursScores_chiens")) || [];
+    const scoresAnimaux =
+      JSON.parse(localStorage.getItem("meilleursScores_animaux")) || [];
+
+    scoreListDiv.innerHTML = "";
+    scoreListChiens.innerHTML = "";
+
+    if (scoresAnimaux.length === 0) {
+      scoreListDiv.innerHTML =
+        "<div>Aucun score enregistré pour les animaux.</div>";
+    } else {
+      scoreListDiv.innerHTML = "<h2>Meilleurs Scores pour Animaux :</h2><ul>";
+      scoresAnimaux.forEach((score, index) => {
+        scoreListDiv.innerHTML += `<li>${
+          index + 1
+        } place : ${score} points</li>`;
+      });
+      scoreListDiv.innerHTML += "</ul>";
+    }
+
+    if (scoresChiens.length === 0) {
+      scoreListChiens.innerHTML =
+        "<div>Aucun score enregistré pour les chiens.</div>";
+    } else {
+      scoreListChiens.innerHTML = "<h2>Meilleurs Scores pour Chiens :</h2><ul>";
+      scoresChiens.forEach((score, index) => {
+        scoreListChiens.innerHTML += `<li>${
+          index + 1
+        } place : ${score} points </li>`;
+      });
+      scoreListChiens.innerHTML += "</ul>";
+    }
+  }
+
   function masquerCartes() {
     premiereCarte.classList.remove("flipped");
     deuxiemeCarte.classList.remove("flipped");
@@ -126,23 +178,23 @@ function init() {
     premiereCarte.querySelector(".couverture").style.visibility = "visible";
     deuxiemeCarte.querySelector(".couverture").style.visibility = "visible";
 
-    // Réinitialise les cartes sélectionnées
     premiereCarte = null;
     deuxiemeCarte = null;
-    verrouillageJeu = false; // Déverrouille le jeu
+    verrouillageJeu = false;
   }
 
-  // Événement pour réinitialiser le jeu avec la barre d'espace
   document.addEventListener("keydown", (event) => {
     if (event.code === "Space") {
-      event.preventDefault(); // Empêche le défilement de page
+      event.preventDefault();
       resetJeu();
     }
   });
 
-  // Fonction pour réinitialiser le jeu
   function resetJeu() {
     const choixNombreDeCartes = document.querySelector(".nombreDeCartes").value;
-    genererCartes(parseInt(choixNombreDeCartes)); // Recommencer une nouvelle partie
+    document.querySelector("#score").textContent = `Score : ${score}`;
+    genererCartes(parseInt(choixNombreDeCartes));
+    score = 0;
+    bonDuo = 0;
   }
 }

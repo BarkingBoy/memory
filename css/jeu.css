@@ -1,169 +1,139 @@
-/* Reset CSS */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    /* Assure que le body prend toute la hauteur */
-}
-
-header {
-    width: 100%;
-    background-color: #4CAF50;
-    /* Couleur de fond de l'en-tête */
-    position: fixed;
-    /* Fixe l'en-tête en haut */
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    /* Assure que l'en-tête est au-dessus des autres éléments */
-}
-
-nav ul {
-    list-style: none;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-around;
-}
-
-nav a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-}
-
-nav a:hover {
-    text-decoration: underline;
-    /* Sous-ligne lors du survol */
-}
-
-section {
-    padding: 80px 20px 20px;
-    /* Ajoute un espacement en haut pour éviter que le contenu ne soit caché par l'en-tête fixe */
-    max-width: 800px;
-    /* Limite la largeur du contenu */
-    text-align: center;
-    /* Centre le texte */
-}
-
-h1 {
-    margin-bottom: 20px;
-}
-
-h2 {
-    margin-top: 40px;
-}
-
-ul {
-    list-style-type: disc;
-    margin: 20px 0;
-    padding-left: 20px;
-}
-
 img {
-    max-width: 100%;
-    /* Assure que l'image ne dépasse pas la largeur de son conteneur */
-    height: auto;
-    /* Garde les proportions de l'image */
-    margin-top: 20px;
-    /* Ajoute un espacement en haut de l'image */
+  max-width: 100%;
+
+  height: auto;
+
+  margin-top: 20px;
 }
 
 strong {
-    color: #4CAF50;
-    /* Donne une couleur aux éléments en gras */
+  color: #4caf50;
 }
 
-/* Styles pour le conteneur des cartes */
+select {
+  padding: 10px;
+  margin-top: 10px;
+
+  font-size: 16px;
+}
+
+#play-button {
+  background-color: #4caf50;
+  margin-top: 10px;
+  border: solid 1px black;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
 .conteneur-cartes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    /* Utilise une grille responsive */
-    gap: 10px;
-    /* Espace entre les cartes */
-    margin: 20px auto;
-    max-width: 800px;
-    /* Largeur maximale pour le conteneur */
-    padding-top: 80px;
-    /* Assure que les cartes ne sont pas cachées par l'en-tête */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+
+  gap: 10px;
+
+  margin: 20px auto;
+  max-width: 800px;
+
+  padding-top: 80px;
 }
 
-/* Styles pour chaque carte */
 .cartes {
-    position: relative;
-    cursor: pointer;
-    border-radius: 8px;
-    /* Arrondi des coins des cartes */
-    overflow: hidden;
-    /* Masque le débordement */
+  position: relative;
+  cursor: pointer;
+  border-radius: 8px;
+
+  overflow: hidden;
 }
 
 .cartes img {
-    width: 100%;
-    /* S'assure que l'image remplit la carte */
-    height: auto;
-    /* Maintient le ratio d'aspect */
-    display: block;
-    /* S'assure que l'image se comporte comme un bloc */
+  width: 100%;
+
+  height: auto;
+
+  display: block;
 }
 
 .couverture {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: white;
-    /* Couverture blanche */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: visible;
-    /* Visible par défaut */
-    transition: visibility 0.3s ease;
-    /* Transition pour un effet plus fluide */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: visible;
+
+  transition: visibility 0.2s ease;
 }
 
 .image-couverture {
-    width: 50%;
-    /* Réduit la taille de l'image de couverture */
-    height: auto;
-    /* Maintient le ratio d'aspect */
+  width: 50%;
+
+  height: auto;
 }
 
-/* Effet pour les cartes retournées */
 .cartes.flipped {
-    transform: rotateY(180deg);
-    /* Rotation de la carte */
-    transition: transform 0.6s;
-    /* Transition douce */
+  transform: rotateY(180deg);
+
+  transition: transform 0.8s;
 }
 
-/* Responsive */
+.score-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.score-list,
+.score-list-chiens {
+  width: 45%;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: solid 1px #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.score-list ul,
+.score-list-chiens ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.score-list li,
+.score-list-chiens li {
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.score-list li:nth-child(odd),
+.score-list-chiens li:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
 @media (max-width: 500px) {
-    nav ul {
-        flex-direction: column;
-        /* Aligne les éléments de navigation en colonne sur mobile */
-        align-items: center;
-    }
+  nav ul {
+    flex-direction: column;
 
-    section {
-        padding: 60px 10px 20px;
-        /* Réduit l'espacement sur mobile */
-    }
+    align-items: center;
+  }
 
-    .conteneur-cartes {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        /* Ajuste la taille des cartes sur mobile */
-    }
+  section {
+    padding: 60px 10px 20px;
+  }
+
+  .conteneur-cartes {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
 }

@@ -1,104 +1,56 @@
-/* Reset CSS */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    /* Aligne le contenu en haut */
-    min-height: 100vh;
-    /* Assure que le body prend toute la hauteur */
-}
-
-header {
-    width: 100%;
-    background-color: #4CAF50;
-    /* Couleur de fond de l'en-tête */
-    position: fixed;
-    /* Fixe l'en-tête en haut */
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    /* Assure que l'en-tête est au-dessus des autres éléments */
-}
-
-nav ul {
-    list-style: none;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-around;
-}
-
-nav a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-}
-
-nav a:hover {
-    text-decoration: underline;
-    /* Souligne les liens au survol */
-}
-
 h3 {
-    text-align: center;
-    /* Centre le texte */
-    color: white;
-    /* Couleur du texte du profil */
-    margin-top: 10px;
-    /* Espacement au-dessus du titre */
+  text-align: center;
+
+  color: white;
+
+  margin-top: 10px;
 }
 
-section {
-    padding: 80px 20px 20px;
-    /* Ajoute un espacement en haut pour éviter que le contenu ne soit caché par l'en-tête fixe */
-    max-width: 800px;
-    /* Limite la largeur du contenu */
-    text-align: center;
-    /* Centre le texte */
-    margin-top: 20px;
-    /* Ajoute un espacement entre les sections */
+#play-button {
+  background-color: #4caf50;
+  margin-top: 10px;
+  border: solid 1px black;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
 
 h2 {
-    margin-top: 40px;
-    color: #4CAF50;
-    /* Couleur du texte des titres de section */
+  margin-top: 40px;
+  color: #4caf50;
 }
 
 select {
-    padding: 10px;
-    /* Espacement intérieur pour le sélecteur */
-    margin-top: 10px;
-    /* Espacement au-dessus du sélecteur */
-    font-size: 16px;
-    /* Taille de police pour le sélecteur */
+  padding: 10px;
+
+  margin-top: 10px;
+
+  font-size: 16px;
 }
 
 #img-exemple {
-    margin-top: 20px;
-    /* Ajoute un espacement au-dessus de l'exemple d'image */
+  margin-top: 20px;
 }
 
-/* Responsive */
-@media (max-width: 500px) {
-    nav ul {
-        flex-direction: column;
-        /* Change la direction en colonne sur les petits écrans */
-        align-items: center;
-        /* Centre les éléments de la liste */
-    }
+.deconnexion {
+  display: none;
+}
 
-    section {
-        padding: 60px 10px 20px;
-        /* Réduit l'espacement sur mobile */
-    }
+.none {
+  display: none;
+}
+
+@media (max-width: 500px) {
+  nav ul {
+    flex-direction: column;
+
+    align-items: center;
+  }
+
+  section {
+    padding: 60px 10px 20px;
+  }
 }

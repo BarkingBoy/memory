@@ -34,7 +34,7 @@ const testPasswordForce = (password) => {
     return "moyen";
   }
 
-  return "faible"; // Valeur par défaut
+  return "faible"; 
 };
 
 export {
@@ -44,9 +44,4 @@ export {
   testPasswordForce,
 };
 
-/**
- * Mettre en place les vérifications sur chaque champ du formulaire d'inscription :
-Le Nom d'utilisateur doit vérifier 3 caractères minimum.
-L'email doit être un email valide.
-Le mot de passe doit correspondre à la vérification du mot de passe et il doit faire au moins 6 caractères. Il doit posséder un symbole,un chiffre et des lettres.
- */
+

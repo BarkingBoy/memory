@@ -6,9 +6,7 @@ function init() {
   const choixNombreDeCartes = document.querySelector(".nombreDeCartes");
   const playButton = document.querySelector("#play-button");
   const container = document.querySelector(".conteneur-cartes");
-  const scoreListDiv = document.querySelector("#score-list");
-  const scoreListChiens = document.querySelector("#score-list-chiens");
-
+  const tableBody = document.querySelector("#table-body");
   let premiereCarte = null;
   let deuxiemeCarte = null;
   let verrouillageJeu = false;
@@ -27,7 +25,7 @@ function init() {
     }
   });
 
-  afficherMeilleursScores();
+  afficherScoresTableau();
 
   playButton.addEventListener("click", () => {
     nombreDeCartes = parseInt(choixNombreDeCartes.value);
@@ -48,7 +46,6 @@ function init() {
     }
 
     const allCartes = [...arrayChien, ...arrayChien];
-
     allCartes.sort(() => Math.random() - 0.5);
 
     allCartes.forEach((img) => {
@@ -98,8 +95,8 @@ function init() {
 
       if (bonDuo === nombreDeCartes / 2) {
         alert("Victoire ! Toutes les paires ont été trouvées !");
-        sauvegarderScore(score);
-        afficherMeilleursScores();
+        sauvegarderScoreTableau(score);
+        afficherScoresTableau();
         bonDuo = 0;
       }
 
@@ -115,60 +112,46 @@ function init() {
     }
   }
 
-  function sauvegarderScore(score) {
-    const imageChoisie = sessionStorage.getItem("ChoixImages");
+  function sauvegarderScoreTableau(score) {
+    const imageChoisie = sessionStorage.getItem("ChoixImages") || "animaux";
+    const tailleMemory = localStorage.getItem("Taille memory") || "Inconnu";
+    const pseudo = sessionStorage.getItem("pseudo") || prompt("Entrez votre pseudo");
+    const dateActuelle = new Date().toLocaleString();
 
-    let scores =
-      JSON.parse(localStorage.getItem(`meilleursScores_${imageChoisie}`)) || [];
+    const newScore = {
+      pseudo,
+      score,
+      taille: tailleMemory,
+      choixMemory: imageChoisie,
+      date: dateActuelle,
+    };
 
-    scores.push(score);
+    let scoresTableau =
+      JSON.parse(localStorage.getItem("tableScores")) || [];
 
-    // Trie les scores du plus petit au plus grand
-    scores.sort((a, b) => a - b);
+    
+    scoresTableau.push(newScore);
 
-    // Garde seulement les 5 meilleurs scores
-    scores = scores.slice(0, 5);
-
-    localStorage.setItem(
-      `meilleursScores_${imageChoisie}`,
-      JSON.stringify(scores)
-    );
+   
+    localStorage.setItem("tableScores", JSON.stringify(scoresTableau));
   }
 
-  function afficherMeilleursScores() {
-    const scoresChiens =
-      JSON.parse(localStorage.getItem("meilleursScores_chiens")) || [];
-    const scoresAnimaux =
-      JSON.parse(localStorage.getItem("meilleursScores_animaux")) || [];
+  function afficherScoresTableau() {
+    const scoresTableau =
+      JSON.parse(localStorage.getItem("tableScores")) || [];
 
-    scoreListDiv.innerHTML = "";
-    scoreListChiens.innerHTML = "";
+    
+    tableBody.innerHTML = "";
 
-    if (scoresAnimaux.length === 0) {
-      scoreListDiv.innerHTML =
-        "<div>Aucun score enregistré pour les animaux.</div>";
-    } else {
-      scoreListDiv.innerHTML = "<h2>Meilleurs Scores pour Animaux :</h2><ul>";
-      scoresAnimaux.forEach((score, index) => {
-        scoreListDiv.innerHTML += `<li>${
-          index + 1
-        } place : ${score} points</li>`;
-      });
-      scoreListDiv.innerHTML += "</ul>";
-    }
+    scoresTableau.forEach((scoreData) => {
+      const newRow = tableBody.insertRow();
 
-    if (scoresChiens.length === 0) {
-      scoreListChiens.innerHTML =
-        "<div>Aucun score enregistré pour les chiens.</div>";
-    } else {
-      scoreListChiens.innerHTML = "<h2>Meilleurs Scores pour Chiens :</h2><ul>";
-      scoresChiens.forEach((score, index) => {
-        scoreListChiens.innerHTML += `<li>${
-          index + 1
-        } place : ${score} points </li>`;
-      });
-      scoreListChiens.innerHTML += "</ul>";
-    }
+      newRow.insertCell().textContent = scoreData.pseudo;
+      newRow.insertCell().textContent = scoreData.score;
+      newRow.insertCell().textContent = scoreData.taille;
+      newRow.insertCell().textContent = scoreData.choixMemory;
+      newRow.insertCell().textContent = scoreData.date;
+    });
   }
 
   function masquerCartes() {

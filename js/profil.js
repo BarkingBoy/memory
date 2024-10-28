@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const buttonDeconnexion = document.querySelector(".deconnexion");
   const profileSection = document.getElementById("profile");
   const imgExempleDiv = document.getElementById("img-exemple");
-  const scoreListDiv = document.getElementById("score-list");
   const choixImageSelect = document.getElementById("choix-image");
 
   if (sessionData) {
@@ -16,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "index.html";
     });
 
-    afficherMeilleursScores();
+    
   } else {
     buttonDeconnexion.style.display = "none";
   }
@@ -41,15 +40,5 @@ document.addEventListener("DOMContentLoaded", () => {
       img.className = "image-exemple";
       imgExempleDiv.appendChild(img);
     }
-  }
-
-  function afficherMeilleursScores() {
-    const scores = JSON.parse(sessionStorage.getItem("meilleursScores")) || [];
-
-    scoreListDiv.innerHTML = scores.length
-      ? `<h2>Meilleurs Scores</h2><ul>${scores
-          .map((score, index) => `<li>Score ${index + 1} : ${score}</li>`)
-          .join("")}</ul>`
-      : "<div>Aucun score enregistré pour l'instant.</div>";
   }
 });

@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updatePasswordStrength() {
     const password = passwordInput.value;
     const force = testPasswordForce(password);
-
+    
     console.log("Force du mot de passe:", force);
     passwordForce.textContent = `Niveau de sécurité : ${force}`;
 

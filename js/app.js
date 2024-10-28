@@ -113,9 +113,11 @@ function init() {
   }
 
   function sauvegarderScoreTableau(score) {
+
     const imageChoisie = sessionStorage.getItem("ChoixImages") || "animaux";
     const tailleMemory = localStorage.getItem("Taille memory") || "Inconnu";
-    const pseudo = sessionStorage.getItem("pseudo") || prompt("Entrez votre pseudo");
+    const idSessionData = JSON.parse(sessionStorage.getItem("idSession"));
+    const pseudo = idSessionData?.pseudo || prompt("Entrez votre pseudo");
     const dateActuelle = new Date().toLocaleString();
 
     const newScore = {
@@ -131,6 +133,12 @@ function init() {
 
     
     scoresTableau.push(newScore);
+        scoresTableau.sort((a, b) => a.score - b.score);
+
+    
+    if (scoresTableau.length > 5) {
+        scoresTableau = scoresTableau.slice(0, 5);
+    }
 
    
     localStorage.setItem("tableScores", JSON.stringify(scoresTableau));

@@ -103,4 +103,10 @@ ul {
     width: 100%;
     margin-bottom: 10px;
   }
+
+  .btn btn-secondary dropdown-toggle {
+    font-size: 14px;
+    padding: 12px 28px;
+    color: #4caf50;
+  }
 }
